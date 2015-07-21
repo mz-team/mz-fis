@@ -11,11 +11,21 @@
     "mz": "bin/mz",
     "mz-fis": "bin/mz"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mz-team/mz-fis.git"
+  },
   "keywords": [
-    "fis"
+    "fis",
+    "mz",
+    "i18n"
   ],
   "author": "kaiye",
   "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/mz-team/mz-fis/issues"
+  },
+  "homepage": "https://github.com/mz-team/mz-fis#readme",
   "dependencies": {
     "fis": "1.9.21",
     "fis-preprocessor-extlang": "0.0.8",
