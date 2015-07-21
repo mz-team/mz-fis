@@ -21,6 +21,9 @@ fis.config.merge({
     statics: '/static',
     templates: '/template',
     namespace: '',
+    livereload: {
+        port: 35729
+    },
     server: {
         rewrite: true,
         libs: 'pc',
@@ -34,8 +37,8 @@ fis.config.merge({
             scss: 'sass',
             po: 'po'
         },
-        postprocessor: {
-            tpl: 'components, extlang',
+        preprocessor: {
+            tpl: 'replacer, components, extlang',
             html: 'components',
             js: 'components',
             css: 'components'
@@ -149,6 +152,15 @@ fis.config.merge({
                 margin: 10
             }
         },
+        preprocessor: {
+            replacer: {
+                reg: /\:page\/.+\.tpl$/,
+                from: /\{\{([\.\w]+)\}\}/g,
+                to: function(a,b,c){
+                    return fis.config.get(b);
+                }
+            }
+        },
         postprocessor: {
             jswrapper: {
                 type: 'amd'
@@ -157,6 +169,13 @@ fis.config.merge({
         smarty: {
             'left_delimiter'  : '<{',
             'right_delimiter' : '}>'
+        },
+        prepackager: {
+            'js-i18n': {
+                enable: true,
+                left_delimiter: '<{',
+                right_delimiter: '}>'
+            }
         },
         lint: {
             jshint: {
@@ -175,7 +194,7 @@ fis.config.merge({
     },
     component: {
         protocol: 'github',
-        gitlab: {
+        github: {
             author: 'mz-components'
         },
         skipRoadmapCheck: true
