@@ -1,3 +1,0 @@
-#!/usr/bin/env node
-
-require('../mz.js').cli.run( process.argv );
