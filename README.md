@@ -4,7 +4,7 @@
 
 ##目录规范
 
-![目录规范][struct.png]
+![目录规范][https://raw.githubusercontent.com/mz-team/mz-fis/master/struct.png]
 
 ##安装方法
 
