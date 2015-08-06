@@ -1,8 +1,11 @@
 {
   "name": "mz-fis",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A PHP i18n Framework based on FIS3",
   "main": "index.js",
+  "bin": {
+    "mz": "bin/mz.js"
+  },
   "scripts": {
     "install": "node patch.js",
     "test": "echo \"Error: no test specified\" && exit 1"
