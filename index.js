@@ -78,6 +78,8 @@ fis.util.map(sets, function(key, value) {
 
 fis.set('project.ignore', ['node_modules/**', 'output/**', '.git/**','**/.svn/**', 'fis-conf.js','**/_*.scss']); // set 为覆盖不是叠加
 
+fis.config.set('component.github.author', 'mz-components');
+
 //addSameNameRequire 会用到
 fis.set('project.ext', {
   po   : 'json',
