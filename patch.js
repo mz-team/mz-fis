@@ -21,6 +21,9 @@ var isPassFile = function(blackFilePatterns){
 
 
 function travel(dir, callback) {
+    if(!fs.existsSync(dir)){
+        return false;
+    }
     fs.readdirSync(dir).forEach(function (file) {
         var pathname = path.join(dir, file);
         if (fs.statSync(pathname).isDirectory()) {
@@ -36,6 +39,7 @@ function travel(dir, callback) {
 console.log('patching...');
 
 travel(patchesDir, function(path){
+
     var target =  path.replace(patchesDir, '.'),
         modType = '[add]';
 

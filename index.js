@@ -122,11 +122,11 @@ fis.match('*', {
         // release: '/${static}/${namespace}/$0'
 });
 fis.match('*.tpl', {
-    parser: function (content, file, settings) {
+    parser: [function (content, file, settings) {
         return content.replace(/\{\{([\.\w]+)\}\}/g, function(a,b,c){
           return fis.get(b);
         });
-    },
+    }],
     preprocessor: [fis.plugin('extlang', {
       'left_delimiter'  : sets.smarty.left_delimiter,
       'right_delimiter' : sets.smarty.right_delimiter      
@@ -200,7 +200,7 @@ fis.match('/{plugin/**,smarty/**,php-simulation-env/**,smarty.conf,domain.conf,*
 
 
 fis.match('server.conf', {
-    parser: function (content, file, settings) {
+    parser: [function (content, file, settings) {
       content = content.replace(/(\^\S*)\{\{([\.\w]+)\}\}/g, function(a,b,c){
           return b + fis.get(c).replace(/\//g, '\\\/');
       });
@@ -208,7 +208,7 @@ fis.match('server.conf', {
         return content.replace(/\{\{([\.\w]+)\}\}/g, function(a,b,c){
           return fis.get(b);
       });
-    },
+    }],
     release: '/server-conf/${rewriteFilename}.conf'
 });
 // test & config
