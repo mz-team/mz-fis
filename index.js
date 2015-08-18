@@ -1,10 +1,12 @@
 //vi mz/index.js
-var fis = module.exports = require('fis3');
+var fis =  require('fis3');
 var lolcat = require('fis-lolcat');
 
 fis.require.prefixes.unshift('mz');
 fis.cli.name = 'mz';
 fis.cli.info = require('./package.json');
+
+
 
 /**
  * 输出 mz 版本信息。
@@ -60,6 +62,7 @@ var sets = {
         'left_delimiter': '<{',
         'right_delimiter': '}>'
     },
+    'browsers': ['> 1%', 'last 2 versions', 'Firefox ESR', 'Opera 12.1'],
     'server':{
       'rewrite': true,
       'type': 'php',
@@ -78,13 +81,15 @@ fis.util.map(sets, function(key, value) {
 
 fis.set('project.ignore', ['node_modules/**', 'output/**', '.git/**','**/.svn/**', 'fis-conf.js','**/_*.scss']); // set 为覆盖不是叠加
 
-fis.config.set('component.github.author', 'mz-components');
+fis.set('component.github.author', 'mz-components');
 
 //addSameNameRequire 会用到
 fis.set('project.ext', {
   po   : 'json',
   scss : 'css'
 }); 
+
+
 
 
 //模块化方案，本项目选中CommonJS方案(同样支持异步加载哈)
@@ -126,7 +131,10 @@ fis.match('*.tpl', {
       'left_delimiter'  : sets.smarty.left_delimiter,
       'right_delimiter' : sets.smarty.right_delimiter      
     }), fis.plugin('components')],
-    
+    postprocessor: fis.plugin('require-async',{
+      'left_delimiter'  : sets.smarty.left_delimiter,
+      'right_delimiter' : sets.smarty.right_delimiter 
+    }),
     optimizer: [
         fis.plugin('smarty-xss'),
         fis.plugin('html-compress')
@@ -139,8 +147,8 @@ fis.match('*.tpl', {
 fis.match('*.js', {
     useSameNameRequire: true,
     preprocessor: fis.plugin('components')
-    // postprocessor: fis.plugin('require-async')
 });
+
 fis.match('/page/**.tpl', {
     // 标记是否是个页面，向下兼容
     extras: {
@@ -223,10 +231,10 @@ fis.match('::package', {
     postpackager: [require('./lib/livereload-target.js'), function createMap(ret) {
         var path = require('path')
         var root = fis.project.getProjectPath();
-        var map = fis.file.wrap(path.join(root, fis.get('namespace') + '-map.json'));;
+        var map = fis.file.wrap(path.join(root, fis.get('namespace') + '-map.json'));
         if(Object.keys(ret.map.res).length){
           map.setContent(JSON.stringify(ret.map));
-          ret.pkg[map.subpath] = map;          
+          ret.pkg[map.subpath] = map;
         }
     }],
     spriter: fis.plugin('csssprites')
@@ -268,5 +276,38 @@ fis.match('/favicon.ico', {
 
 
 
+//项目 fis-conf.js load完之后再运行的
+fis.amount = function(){
+
+  fis.match('**/*.scss', {
+      postprocessor: fis.plugin('autoprefixer',{
+        browsers: fis.get('browsers')
+      })
+  });
+
+  if(fis.get('urlprefix') !== undefined){
+     fis.set('rewriteFilename', fis.get('namespace') + fis.get('urlprefix').replace(/\//g, '_'));
+  }
+
+  if(fis.get('cdn') !== undefined){
+
+    ['prod', 'sqa'].forEach(function(_mediaName_) {
+      fis.media(_mediaName_)
+          .match('*.js', {
+              domain: fis.get('cdn'),
+          })
+          .match('*.{css,scss}', {
+              domain: fis.get('cdn'),
+          })
+          .match('::image', {
+              domain: fis.get('cdn'),
+          })
+    });
+
+  }
+
+}
+
+module.exports = fis;
 
 
