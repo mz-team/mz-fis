@@ -228,7 +228,7 @@ fis.match('::package', {
             right_delimiter: sets.smarty.right_delimiter
         })
     ],
-    postpackager: [require('./lib/livereload-target.js'), function createMap(ret) {
+    postpackager: [require('./lib/livereload-target.js'), require('./lib/weinre-target.js'),function createMap(ret) {
         var path = require('path')
         var root = fis.project.getProjectPath();
         var map = fis.file.wrap(path.join(root, fis.get('namespace') + '-map.json'));
