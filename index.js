@@ -79,7 +79,7 @@ fis.util.map(sets, function(key, value) {
     fis.set(key, value);
 });
 
-fis.set('project.ignore', ['node_modules/**', 'output/**', '.git/**','**/.svn/**', 'fis-conf.js','**/_*.scss']); // set 为覆盖不是叠加
+fis.set('project.ignore', ['node_modules/**', 'output/**', '.git/**','**/.svn/**', 'fis-conf.js','**/_*']); // set 为覆盖不是叠加
 
 fis.set('component.github.author', 'mz-components');
 
@@ -88,8 +88,6 @@ fis.set('project.ext', {
   po   : 'json',
   scss : 'css'
 }); 
-
-
 
 
 //模块化方案，本项目选中CommonJS方案(同样支持异步加载哈)
@@ -104,7 +102,6 @@ fis.match('**/*.scss', {
       var customFileExt = '.custom.scss';
 
       if(fis.util.isFile(file.realpathNoExt + customFileExt)){
-
         var customFilename = file.filename + customFileExt;
         var patch = [
           '/*!'+ customFilename +'*/',
@@ -199,7 +196,7 @@ fis.match('/{plugin/**,smarty/**,php-simulation-env/**,smarty.conf,domain.conf,*
 
 
 
-fis.match('server.conf', {
+fis.match('/server.conf', {
     parser: [function (content, file, settings) {
       content = content.replace(/(\^\S*)\{\{([\.\w]+)\}\}/g, function(a,b,c){
           return b + fis.get(c).replace(/\//g, '\\\/');
@@ -270,7 +267,9 @@ fis.match('/favicon.ico', {
 
       .match('*.png', {
           useHash: true,
-          optimizer: fis.plugin('png-compressor')
+          optimizer: fis.plugin('png-compressor',{
+            type : 'pngquant'
+          })
       })  
 });
 
