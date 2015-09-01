@@ -275,36 +275,63 @@ fis.match('/favicon.ico', {
 
 
 
-//项目 fis-conf.js load完之后再运行的
-fis.amount = function(){
-
-  fis.match('**/*.scss', {
-      postprocessor: fis.plugin('autoprefixer',{
-        browsers: fis.get('browsers')
-      })
-  });
-
+//项目 fis-conf.js set完后再运行
+fis.mount = function(config){
+  //server.conf重命名
   if(fis.get('urlprefix') !== undefined){
      fis.set('rewriteFilename', fis.get('namespace') + fis.get('urlprefix').replace(/\//g, '_'));
   }
 
-  if(fis.get('cdn') !== undefined){
+  if(typeof config === 'function'){
+    return config(fis);
+  }
+  //配置
+  if(!config){
+    return;
+  }else{
+    for(var i in config){
+      fis.set(i, config[i]);
+    }
+  }
 
+  //autoprefixer
+  if(Array.isArray(config.browsers)){
+    fis.match('**/*.scss', {
+        postprocessor: fis.plugin('autoprefixer',{
+          browsers: config.browsers
+        })
+    });
+  }
+
+  //静态资源增加domain前缀
+  if(config.cdn){
+    var cdn = 'http://' + config.cdn;
     ['prod', 'sqa'].forEach(function(_mediaName_) {
       fis.media(_mediaName_)
           .match('*.js', {
-              domain: fis.get('cdn'),
+              domain: cdn,
           })
           .match('*.{css,scss}', {
-              domain: fis.get('cdn'),
+              domain: cdn,
           })
           .match('::image', {
-              domain: fis.get('cdn'),
+              domain: cdn,
           })
     });
-
   }
 
+  //设置环境变量
+  if(config.env && Array.isArray(config.env.keys)){
+    var env = {};
+    for (var i = 0; i < config.env.keys.length; i++) {
+      if(process.env && process.env[config.env.keys[i]]){
+          env[config.env.keys[i]] = process.env[config.env.keys[i]];
+      }else{
+          fis.log.error('invalid environment variable [' + i + '] ');
+      }
+    }
+    fis.set('env', env);
+  }
 }
 
 module.exports = fis;
