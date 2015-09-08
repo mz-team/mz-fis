@@ -69,7 +69,7 @@ var sets = {
       'libs': '',
       'clean': {
         'include': '*',
-        'exclude': '/index.php'
+        'exclude': ''
       }
     }
 };
@@ -274,6 +274,7 @@ fis.match('{' + [
 ].join() + '}', {
     packOrder: -100
 });
+fis.match('tracker.js',{packOrder: 100});
 
 // mz release prod 线上环境，sqa为测试环境
 ['prod', 'sqa'].forEach(function(_mediaName_) {
