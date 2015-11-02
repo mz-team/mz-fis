@@ -13,14 +13,14 @@ fis.cli.info = require('./package.json');
  *
  * ```
  *
- * __/\\\\____________/\\\\__/\\\\\\\\\\\\\\\_        
- *  _\/\\\\\\________/\\\\\\_\////////////\\\__       
- *   _\/\\\//\\\____/\\\//\\\___________/\\\/___      
- *    _\/\\\\///\\\/\\\/_\/\\\_________/\\\/_____     
- *     _\/\\\__\///\\\/___\/\\\_______/\\\/_______    
- *      _\/\\\____\///_____\/\\\_____/\\\/_________   
- *       _\/\\\_____________\/\\\___/\\\/___________  
- *        _\/\\\_____________\/\\\__/\\\\\\\\\\\\\\\_ 
+ * __/\\\\____________/\\\\__/\\\\\\\\\\\\\\\_
+ *  _\/\\\\\\________/\\\\\\_\////////////\\\__
+ *   _\/\\\//\\\____/\\\//\\\___________/\\\/___
+ *    _\/\\\\///\\\/\\\/_\/\\\_________/\\\/_____
+ *     _\/\\\__\///\\\/___\/\\\_______/\\\/_______
+ *      _\/\\\____\///_____\/\\\_____/\\\/_________
+ *       _\/\\\_____________\/\\\___/\\\/___________
+ *        _\/\\\_____________\/\\\__/\\\\\\\\\\\\\\\_
  *         _\///______________\///__\///////////////__
  * ```
  *
@@ -34,7 +34,7 @@ fis.cli.version = function() {
 
 
   var logo = [
-      "  /\\\\\\\\            /\\\\\\\\  /\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\     ",    
+      "  /\\\\\\\\            /\\\\\\\\  /\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\     ",
       "  \\/\\\\\\\\\\\\        /\\\\\\\\\\\\ \\////////////\\\\\\         ",
       "   \\/\\\\\\//\\\\\\    /\\\\\\//\\\\\\           /\\\\\\/         ",
       "    \\/\\\\\\\\///\\\\\\/\\\\\\/ \\/\\\\\\         /\\\\\\/          ",
@@ -68,7 +68,7 @@ var sets = {
       'type': 'php',
       'libs': '',
       'clean': {
-        'include': '*',
+        'include': '**.*',
         'exclude': ''
       }
     }
@@ -89,7 +89,7 @@ fis.set('project.ext', {
 });
 
 //增加 ::image 的类型
-fis.set('project.fileType.image', ['mp3']);
+fis.set('project.fileType.image', ['mp3', 'mp4', 'webm']);
 
 
 //模块化方案，本项目选中CommonJS方案(同样支持异步加载哈)
@@ -130,17 +130,17 @@ fis.match('*.tpl', {
     }],
     preprocessor: [fis.plugin('extlang', {
       'left_delimiter'  : sets.smarty.left_delimiter,
-      'right_delimiter' : sets.smarty.right_delimiter      
+      'right_delimiter' : sets.smarty.right_delimiter
     }), fis.plugin('components')],
     postprocessor: fis.plugin('require-async',{
       'left_delimiter'  : sets.smarty.left_delimiter,
-      'right_delimiter' : sets.smarty.right_delimiter 
+      'right_delimiter' : sets.smarty.right_delimiter
     }),
     optimizer: [
         fis.plugin('smarty-xss'),
         // fis.plugin('html-compress',{
         //   'level' : 'strip',
-        //   'leftDelimiter' : sets.smarty.left_delimiter, 
+        //   'leftDelimiter' : sets.smarty.left_delimiter,
         //   'rightDelimiter' : sets.smarty.right_delimiter
         // })
     ],
@@ -166,7 +166,7 @@ fis.match('/lang/(*).po', {
     rExt: '.json',
     parser: fis.plugin('po', {
 
-    })    
+    })
 });
 fis.match('/components/**', {
     useMap: true,
@@ -248,7 +248,7 @@ fis.match('::package', {
           if(Object.keys(ret.map.res).length){
             map.setContent(JSON.stringify(ret.map, null, 2));
             ret.pkg[map.subpath] = map;
-          }          
+          }
         }
     }],
     spriter: fis.plugin('csssprites')
@@ -314,7 +314,7 @@ fis.mount = function(config){
   }else{
     for(var i in config){
       fis.set(i, config[i]);
-    } 
+    }
   }
 
   //server.conf重命名
@@ -410,5 +410,3 @@ fis.mount = function(config){
 }
 
 module.exports = fis;
-
-
