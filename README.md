@@ -24,6 +24,12 @@
 
 ## 更新日志
 
+### 0.4.0
+* 增加 fis-conf.js 文件必要性检测，没有配置文件的项目无法使用 mz 命令
+* 增加 autoImportCustomScss 配置，是否开启自动引用同一目录下同名 .custom.scss 文件的特性
+* 增加 autoImportParentScss 配置，开启之后会自动 import 父级目录下与父级目录同名的 scss 文件，以便自动引用同一栏目下的父级样式
+* 增加 globalVarScss 配置，项目中所有 scss 文件会自动 import 全局 _var.scss 文件，以便复用全局的 @mixin 与变量
+
 ### 0.3.6
 * 增加 mp4、webm 二进制类型
 

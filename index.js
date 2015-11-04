@@ -101,23 +101,50 @@ fis.hook('relative');
 
 fis.match('**/*.scss', {
     rExt: '.css', // from .scss to .css
-    //自动require同目录同名 .custom.scss
     parser: [function(content, file, settings){
-      var customFileExt = '.custom.scss';
+      var prependScss = [], appendScss = [];
 
-      if(fis.util.isFile(file.realpathNoExt + customFileExt)){
-        var customFilename = file.filename + customFileExt;
-        var patch = [
-          '/*!'+ customFilename +'*/',
-          '@import "'+ customFilename + '";'
-        ];
-        content += patch.join('\n');
+      //若指定 globalVarScss ，则所有 scss 文件自动 import 这个文件，通常用来定义全局 @mixin
+      var globalVarScss = fis.get('globalVarScss');
+      if(globalVarScss){
+        prependScss.push('/*!'+ globalVarScss +'*/');
+        prependScss.push('@import "'+ globalVarScss +'";');
       }
+
+      //自动 import 同目录同名 .custom.scss
+      var customFileExt = '.custom.scss';
+      if(fis.get('autoImportCustomScss')){
+        if(fis.util.isFile(file.realpathNoExt + customFileExt)){
+          var customFilename = file.filename + customFileExt;
+          appendScss.push('/*!'+ customFilename +'*/');
+          appendScss.push('@import "'+ customFilename + '";');
+        }
+      }
+
+      //自动 import 父级目录下与父级目录同名的 scss
+      if(fis.get('autoImportParentScss')){
+        var parentDir = file.dirname.match(/^(.*\/([^\/]+))\/[^\/]+$/);
+        var parentFilename = parentDir[2] + '.scss';
+        if(fis.util.isFile(parentDir[1] + '/' + parentFilename)){
+          prependScss.push('/*!'+ parentFilename +'*/');
+          prependScss.push('@import "../'+ parentFilename +'";');
+        }
+        var parentCustomFilename = parentDir[2] + customFileExt;
+        if(fis.get('autoImportCustomScss') && fis.util.isFile(parentDir[1] + '/' + parentCustomFilename )){
+          prependScss.push('/*!'+ parentCustomFilename +'*/');
+          prependScss.push('@import "../'+ parentCustomFilename +'";');         
+        }
+      }
+
+      content = prependScss.join('\n') + content;
+      content = content + appendScss.join('\n');
       return content;
     },fis.plugin('sass', {
         // fis-parser-sass option
     })]
 });
+
+
 fis.match('*', {
     useHash: false // md5 都关掉
         // release: '/${static}/${namespace}/$0'
@@ -305,6 +332,8 @@ fis.match('tracker.js',{packOrder: 100});
 });
 
 
+
+
 //项目 fis-conf.js set完后再运行
 fis.mount = function(config){
   if(typeof config === 'function'){
@@ -327,6 +356,13 @@ fis.mount = function(config){
           browsers: config.browsers
         })
     });
+  }
+
+  //若指定 globalVarScss ，则所有 scss 文件自动 import 这个文件，通常用来定义全局 @mixin
+  if(config.globalVarScss){
+    if(!fis.util.isFile(fis.util(fis.project.getProjectPath(), config.globalVarScss))){
+      fis.log.error('globalVarScss'.green + ' file not found: ' + config.globalVarScss);
+    }
   }
 
   //如果按相对路径发布
