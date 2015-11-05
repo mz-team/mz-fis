@@ -31,7 +31,7 @@ cli.launch({
     var configFileName = 'fis-conf.js';
     var projectConfigPath = fis.util(process.cwd(), configFileName) ;
     var rOptionIndex = process.argv.indexOf('-r');
-    if(rOptionIndex > -1){
+    if(rOptionIndex > -1 && process.argv[rOptionIndex + 1]){
       var rOptionRoot = process.argv[rOptionIndex + 1];
       if(rOptionRoot.charAt(0) === '/'){
         projectConfigPath = fis.util(rOptionRoot, configFileName) ;
