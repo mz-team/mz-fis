@@ -24,6 +24,9 @@
 
 ## 更新日志
 
+### 0.4.1
+* [bugfix] fis-conf.js 必要性检测修复为只限定 mz release 命令
+
 ### 0.4.0
 * 增加 fis-conf.js 文件必要性检测，没有配置文件的项目无法使用 mz 命令
 * 增加 autoImportCustomScss 配置，是否开启自动引用同一目录下同名 .custom.scss 文件的特性
