@@ -24,6 +24,9 @@
 
 ## 更新日志
 
+### 0.4.3
+* 增加 mz-postprocessor-href-locate 插件，以支持 \*.tpl 中的 a 标签的 href 资源定位特性
+
 ### 0.4.1 - 0.4.2
 * [bugfix] fis-conf.js 必要性检测修复为只限定 mz release 命令
 

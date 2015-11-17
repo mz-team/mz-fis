@@ -149,6 +149,11 @@ fis.match('*', {
     useHash: false // md5 都关掉
         // release: '/${static}/${namespace}/$0'
 });
+
+fis.match('*.html',{
+  postprocessor : fis.plugin('href-locate',{})
+});
+
 fis.match('*.tpl', {
     parser: [function (content, file, settings) {
         return content.replace(/\{\{([\.\w]+)\}\}/g, function(a,b,c){
@@ -159,10 +164,18 @@ fis.match('*.tpl', {
       'left_delimiter'  : sets.smarty.left_delimiter,
       'right_delimiter' : sets.smarty.right_delimiter
     }), fis.plugin('components')],
-    postprocessor: fis.plugin('require-async',{
+    postprocessor: [
+
+    fis.plugin('require-async',{
       'left_delimiter'  : sets.smarty.left_delimiter,
       'right_delimiter' : sets.smarty.right_delimiter
     }),
+    fis.plugin('href-locate',{
+      'left_delimiter'  : sets.smarty.left_delimiter,
+      'right_delimiter' : sets.smarty.right_delimiter
+    })
+
+    ],
     optimizer: [
         fis.plugin('smarty-xss'),
         // fis.plugin('html-compress',{
