@@ -21,8 +21,15 @@
 
 * 支持 与 relative-hook 同时使用 
 
+### 3、lib/compile.js
+
+* 支持 video 标签 poster 属性定位资源
+
 
 ## 更新日志
+
+### 0.4.4
+* 解决 video 标签 poster 属性不能资源定位的问题
 
 ### 0.4.3
 * 增加 mz-postprocessor-href-locate 插件，以支持 \*.tpl 中的 a 标签的 href 资源定位特性
