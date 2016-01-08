@@ -89,7 +89,7 @@ fis.set('project.ext', {
 });
 
 //增加 ::image 的类型
-fis.set('project.fileType.image', ['mp3', 'mp4', 'webm']);
+fis.set('project.fileType.image', ['mp3', 'mp4', 'webm', 'flv']);
 
 
 //模块化方案，本项目选中CommonJS方案(同样支持异步加载哈)
