@@ -1,6 +1,6 @@
 {
   "name": "mz-fis",
-  "version": "0.4.6",
+  "version": "0.4.7",
   "description": "A PHP i18n Framework based on FIS3",
   "main": "index.js",
   "bin": {
