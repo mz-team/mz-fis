@@ -331,12 +331,15 @@ fis.match('tracker.js',{packOrder: 100});
       .match('::image', {
           useHash: true,
       })
-
       .match('*.png', {
           useHash: true,
           optimizer: fis.plugin('png-compressor',{
             type : 'pngquant'
           })
+      })
+      .match('*.hd.png', {
+          useHash: true,
+          optimizer: false
       })
       .match('*.html', {
           optimizer: fis.plugin('html-minifier')
