@@ -46,7 +46,7 @@ travel(patchesDir, function (path) {
         if (fs.existsSync(target) && fs.lstatSync(target).isFile()) {
             modType = '[mod]';
         }
-        fs.createReadStream(path, function (err) {
+        fs.createReadStream(path, {}, function (err) {
             // console.log('err');
         }).pipe(fs.createWriteStream(target));
         console.log(modType + ' ' + target);
