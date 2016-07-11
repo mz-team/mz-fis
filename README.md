@@ -1,4 +1,5 @@
 # MZ-FIS Frontend Framework
+[![Build Status](https://travis-ci.org/mz-team/mz-fis.svg?branch=master)](https://travis-ci.org/mz-team/mz-fis)
 
 该框架基于 [FIS3](http://fis.baidu.com/) ，可用于 PHP Smarty 国际化场景
 
