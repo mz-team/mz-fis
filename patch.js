@@ -4,24 +4,24 @@ var fs = require('fs'),
     blackFilePatterns = [/\.DS_Store$/, /\.svn/];
 
 
-var isPassFile = function(blackFilePatterns){
+var isPassFile = function (blackFilePatterns) {
     var len = blackFilePatterns.length;
-    return function(pathname){
+    return function (pathname) {
         var pass = true;
-        for(var i = 0; i < len ; i++){
-            if(blackFilePatterns[i].test(pathname)){
+        for (var i = 0; i < len; i++) {
+            if (blackFilePatterns[i].test(pathname)) {
                 pass = false;
                 break;
             }
         }
         return pass;
     }
-}(blackFilePatterns);
+} (blackFilePatterns);
 
 
 
 function travel(dir, callback) {
-    if(!fs.existsSync(dir)){
+    if (!fs.existsSync(dir)) {
         return false;
     }
     fs.readdirSync(dir).forEach(function (file) {
@@ -29,25 +29,41 @@ function travel(dir, callback) {
         if (fs.statSync(pathname).isDirectory()) {
             travel(pathname, callback);
         } else {
-            if(isPassFile(pathname)){
+            if (isPassFile(pathname)) {
                 callback(pathname);
-            }  
+            }
         }
     });
 }
 
 console.log('patching...');
 
-travel(patchesDir, function(path){
+travel(patchesDir, function (path) {
 
-    var target =  path.replace(patchesDir, '.'),
-        modType = '[add]';
+    try {
+        var target = path.replace(patchesDir, '.'),
+            modType = '[add]';
+        if (fs.existsSync(target) && fs.lstatSync(target).isFile()) {
+            modType = '[mod]';
+        }
+        fs.createReadStream(path, function (err) {
+            // console.log('err');
+        }).pipe(fs.createWriteStream(target));
+        console.log(modType + ' ' + target);
+    } catch (e) {
+        console.log('try for npm3+');
+        // 兼容 npm3+ 的模块覆盖机制
+        if (target.indexOf('/node_modules/') > -1) {
+            target = '.' + target.slice(target.lastIndexOf("/node_modules/"));
+            if (fs.existsSync(target) && fs.lstatSync(target).isFile()) {
+                modType = '[mod]';
+            }
+            fs.createReadStream(path).pipe(fs.createWriteStream(target));
+            console.log(modType + ' ' + target);
+        }
 
-    if ( fs.existsSync( target )  && fs.lstatSync( target ).isFile()) {
-        modType = '[mod]';
     }
-    fs.createReadStream( path ).pipe( fs.createWriteStream( target ) );
-    console.log(modType + ' ' + target);
+
 });
 
 console.log('done.');

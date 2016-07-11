@@ -12,21 +12,18 @@
 
 ## 补丁细节
 
-### 1、fis3-command-release 
-
-* 支持 weinre 参数调试
-* livereload 默认使用局域网 ip 而非 127.0.0.1
-
-### 2、fis-spriter-csssprites
+### 1、fis-spriter-csssprites
 
 * 支持 与 relative-hook 同时使用 
 
-### 3、lib/compile.js
-
-* 支持 video 标签 poster 属性定位资源
 
 
 ## 更新日志
+
+### 0.5.0
+* 与 fis3 内核同步，兼容 node 4、5、6 版本
+* 增加 `livereload-iprule` 与 `weinre-iprule` 配置，使用方法[参考这里](https://github.com/mz-team/mz-command-release/blob/master/lib/weinre.js#L14)
+* 新增 mz-command-release 便于定制化 release 操作
 
 ### 0.4.8
 * 可以指定不需要压缩的 png 图片，命名格式为 *.hd.png

@@ -91,10 +91,13 @@ fis.set('project.ext', {
 //增加 ::image 的类型
 fis.set('project.fileType.image', ['mp3', 'mp4', 'webm', 'flv']);
 
+//增加 livereload 与 weinre 的本地 IP 限制
+fis.config.set('livereload-iprule', '(?!127)*.*.*.*');
+fis.config.set('weinre-iprule', '(?!127)*.*.*.*');
 
 //模块化方案，本项目选中CommonJS方案(同样支持异步加载哈)
-fis.hook('module', {
-    mode: 'commonJs'
+fis.hook('commonjs', {
+
 });
 //相对路径
 fis.hook('relative');
@@ -139,8 +142,8 @@ fis.match('**/*.scss', {
       content = prependScss.join('\n') + content;
       content = content + appendScss.join('\n');
       return content;
-    },fis.plugin('sass', {
-        // fis-parser-sass option
+    },fis.plugin('node-sass', {
+        // fis-parser-node-sass option
     })]
 });
 
