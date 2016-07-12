@@ -15,6 +15,19 @@ var cli = new Liftoff({
     }
 });
 
+function getProjectRootFromSubPath(path) {
+  var splitRe = process.platform === 'win32' ? /[\/\\]/ : /\/+/;
+  var parts = path.split(splitRe);
+  var result;
+  while(parts.pop()){
+    result = fis.util(fis.util(parts) , "node_modules");
+    if(fis.util.isDir(result)){
+        break;
+    }
+  }
+  return result;
+}
+
 cli.launch({
     cwd: argv.r || argv.root,
     configPath: argv.f || argv.file
@@ -44,7 +57,7 @@ cli.launch({
         }
     }
 
-    fis.require.paths.unshift(path.join(env.cwd, 'node_modules'));
+    fis.require.paths.unshift(getProjectRootFromSubPath(path.join(env.cwd, 'node_modules')));
     fis.require.paths.push(path.join(path.dirname(__dirname), 'node_modules'));
     fis.require.paths.push(path.join(path.dirname(__dirname), 'node_modules/fis3/node_modules'));
 
