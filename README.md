@@ -21,6 +21,9 @@
 
 ## 更新日志
 
+### 0.5.4
+* 增加 mz-parser-partial 插件，以支持 i18n 架构中的 ssi 特性
+
 ### 0.5.3
 * 与 fis3 内核同步，兼容 node 4、5、6 版本
 * 增加 `livereload-iprule` 与 `weinre-iprule` 配置，使用方法[参考这里](https://github.com/mz-team/mz-command-release/blob/master/lib/weinre.js#L14)

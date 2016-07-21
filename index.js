@@ -158,11 +158,17 @@ fis.match('*.html', {
 });
 
 fis.match('*.tpl', {
-  parser: [function (content, file, settings) {
-    return content.replace(/\{\{([\.\w]+)\}\}/g, function (a, b, c) {
-      return fis.get(b);
-    });
-  }],
+  parser: [
+    fis.plugin('partial'),
+    function (content, file, settings) {
+      return content.replace(/\{\{(?:(\w+)\:)?([\.\w]+)\}\}/g, function (str, func, arg) {
+        if (func) {
+          return fis[func](arg);
+        } else {
+          return fis.get(arg);
+        }
+      });
+    }],
   preprocessor: [fis.plugin('extlang', {
     'left_delimiter': sets.smarty.left_delimiter,
     'right_delimiter': sets.smarty.right_delimiter
@@ -347,6 +353,20 @@ fis.match('tracker.js', { packOrder: 100 });
     .match('*.html', {
       optimizer: fis.plugin('html-minifier')
     })
+    .match('*.tpl', {
+      parser: [
+        fis.plugin('partial', { type: 'ssi' }),
+        function (content, file, settings) {
+          return content.replace(/\{\{(?:(\w+)\:)?([\.\w]+)\}\}/g, function (str, func, arg) {
+            if (func) {
+              return fis[func](arg);
+            } else {
+              return fis.get(arg);
+            }
+          });
+        }]
+    });
+
   //这条配置与 hook-relative 一起用的时候有bug，所以开启relative就关掉压缩
 });
 
