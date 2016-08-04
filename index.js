@@ -2,6 +2,24 @@
 var fis = require('fis3');
 var lolcat = require('fis-lolcat');
 
+var cloneObjectOrdered = function (obj) {
+  if (obj === null || typeof obj !== 'object') {
+    return obj;
+  }
+  var temp = obj.constructor();
+
+  if (Array.isArray(obj)) {
+    [].concat(obj).sort().forEach(function (value, index) {
+      temp[index] = cloneObjectOrdered(value);
+    });
+  } else {
+    Object.keys(obj).sort().forEach(function (key) {
+      temp[key] = cloneObjectOrdered(obj[key]);
+    });
+  }
+  return temp;
+}
+
 fis.require.prefixes.unshift('mz');
 fis.cli.name = 'mz';
 fis.cli.info = require('./package.json');
@@ -294,8 +312,10 @@ fis.match('::package', {
       var path = require('path');
       var root = fis.project.getProjectPath();
       var map = fis.file.wrap(path.join(root, fis.get('namespace') + '-map.json'));
+      var orderedMap = cloneObjectOrdered(ret.map);
+
       if (Object.keys(ret.map.res).length) {
-        map.setContent(JSON.stringify(ret.map, null, 2));
+        map.setContent(JSON.stringify(orderedMap, null, 2));
         ret.pkg[map.subpath] = map;
       }
     }

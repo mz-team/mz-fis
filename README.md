@@ -21,6 +21,9 @@
 
 ## 更新日志
 
+### 0.5.5
+* 增加 cloneObjectOrdered 排序，确保每次的 map.json 映射表键值排序不会变动
+
 ### 0.5.4
 * 增加 mz-parser-partial 插件，以支持 i18n 架构中的 ssi 特性
 
