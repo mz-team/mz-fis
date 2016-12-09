@@ -469,7 +469,8 @@ fis.mount = function (config) {
 
   //静态资源增加domain前缀
   if (config.cdn) {
-    var cdn = 'http://' + config.cdn;
+    var cdnMatches = config.cdn.match(/^((?:https?\:)?\/\/)?.+$/);
+    var cdn = cdnMatches[1] ? cdnMatches[0] : '//' + cdnMatches[0];
     ['prod', 'sqa'].forEach(function (_mediaName_) {
       fis.media(_mediaName_)
         .match('*.js', {

@@ -21,6 +21,9 @@
 
 ## 更新日志
 
+### 0.5.6
+* 兼容 https cdn 域名配置
+
 ### 0.5.5
 * 增加 cloneObjectOrdered 排序，确保每次的 map.json 映射表键值排序不会变动
 
