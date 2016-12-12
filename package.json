@@ -1,6 +1,6 @@
 {
     "name": "mz-fis",
-    "version": "0.5.6",
+    "version": "0.6.0",
     "description": "A PHP i18n Framework based on FIS3",
     "main": "index.js",
     "bin": {
@@ -37,7 +37,7 @@
         "fis-optimizer-smarty-xss": "^0.1.3",
         "fis-optimizer-html-compress": "^0.0.7",
         "fis-optimizer-html-minifier": "^0.0.9",
-        "fis-parser-node-sass": "^0.2.1",
+        "fis-parser-node-sass": "^1.0.1",
         "fis-preprocessor-components": "^1.0.19",
         "fis-parser-po": "^0.0.1",
         "fis-prepackager-js-i18n": "^0.0.2",

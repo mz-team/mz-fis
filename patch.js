@@ -3,7 +3,6 @@ var fs = require('fs'),
     patchesDir = 'patches',
     blackFilePatterns = [/\.DS_Store$/, /\.svn/];
 
-
 var isPassFile = function (blackFilePatterns) {
     var len = blackFilePatterns.length;
     return function (pathname) {
@@ -16,54 +15,44 @@ var isPassFile = function (blackFilePatterns) {
         }
         return pass;
     }
-} (blackFilePatterns);
-
-
+}(blackFilePatterns);
 
 function travel(dir, callback) {
     if (!fs.existsSync(dir)) {
         return false;
     }
-    fs.readdirSync(dir).forEach(function (file) {
-        var pathname = path.join(dir, file);
-        if (fs.statSync(pathname).isDirectory()) {
-            travel(pathname, callback);
-        } else {
-            if (isPassFile(pathname)) {
-                callback(pathname);
+    fs
+        .readdirSync(dir)
+        .forEach(function (file) {
+            var pathname = path.join(dir, file);
+            if (fs.statSync(pathname).isDirectory()) {
+                travel(pathname, callback);
+            } else {
+                if (isPassFile(pathname)) {
+                    callback(pathname);
+                }
             }
-        }
-    });
+        });
 }
 
 console.log('patching...');
 
-travel(patchesDir, function (path) {
-
-    try {
-        var target = path.replace(patchesDir, '.'),
-            modType = '[add]';
-        if (fs.existsSync(target) && fs.lstatSync(target).isFile()) {
-            modType = '[mod]';
+travel(patchesDir, function (sourcePath) {
+    var path = sourcePath.replace(patchesDir, '.');
+    var modType = '[add]';
+    if (path.indexOf('node_modules') > -1) {
+        var matchResult = path.match(/^\.[-\w\/]+node_modules\/(([-\w]+)\/(?:[-\w\/\.]+))$/);
+        if (fs.existsSync('./node_modules/' + matchResult[2])) {
+            path = './node_modules/' + matchResult[1];
         }
-        fs.createReadStream(path, {}, function (err) {
-            // console.log('err');
-        }).pipe(fs.createWriteStream(target));
-        console.log(modType + ' ' + target);
-    } catch (e) {
-        console.log('try for npm3+');
-        // 兼容 npm3+ 的模块覆盖机制
-        if (target.indexOf('/node_modules/') > -1) {
-            target = '.' + target.slice(target.lastIndexOf("/node_modules/"));
-            if (fs.existsSync(target) && fs.lstatSync(target).isFile()) {
-                modType = '[mod]';
-            }
-            fs.createReadStream(path).pipe(fs.createWriteStream(target));
-            console.log(modType + ' ' + target);
+        if (fs.existsSync(path) && fs.lstatSync(path).isFile()) {
+            var modType = '[mod]';
         }
-
     }
-
+    fs
+        .createReadStream(sourcePath, {}, function (err) {})
+        .pipe(fs.createWriteStream(path));
+    console.log(modType + ' ' + path);
 });
 
 console.log('done.');

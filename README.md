@@ -9,7 +9,7 @@
 
 ## 安装方法
 
-`sudo npm install -g mz-fis`
+`npm install -g mz-fis`
 
 ## 补丁细节
 
@@ -20,6 +20,9 @@
 
 
 ## 更新日志
+
+### 0.6.0
+* 支持 Node.js 6.9.2 LTS
 
 ### 0.5.6
 * 兼容 https cdn 域名配置
