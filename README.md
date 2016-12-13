@@ -1,5 +1,8 @@
 # MZ-FIS Frontend Framework
 [![Build Status](https://travis-ci.org/mz-team/mz-fis.svg?branch=master)](https://travis-ci.org/mz-team/mz-fis)
+[![npm package](https://badge.fury.io/js/mz-fis.svg)](https://www.npmjs.com/package/mz-fis)
+[![npm download](https://img.shields.io/npm/dm/mz-fis.svg)](https://www.npmjs.com/package/mz-fis)
+[![license](https://img.shields.io/npm/l/mz-fis.svg)](https://www.npmjs.com/package/mz-fis)
 
 该框架基于 [FIS3](http://fis.baidu.com/) ，可用于 PHP Smarty 国际化场景
 
