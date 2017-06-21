@@ -60,6 +60,5 @@ cli.launch({
   fis.require.paths.unshift(getProjectRootFromSubPath(path.join(env.cwd, 'node_modules')));
   fis.require.paths.push(path.join(path.dirname(__dirname), 'node_modules'));
   fis.require.paths.push(path.join(path.dirname(__dirname), 'node_modules/fis3/node_modules'));
-
   fis.cli.run(argv, env);
 });

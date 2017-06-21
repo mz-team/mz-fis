@@ -40,10 +40,11 @@ console.log('patching...');
 travel(patchesDir, function (sourcePath) {
     var path = sourcePath.replace(patchesDir, '.');
     var modType = '[add]';
+    var nodeModulesPath = '.'+ path.sep + 'node_modules'+ path.sep;
     if (path.indexOf('node_modules') > -1) {
-        var matchResult = path.match(/^\.[-\w\/]+node_modules\/(([-\w]+)\/(?:[-\w\/\.]+))$/);
-        if (fs.existsSync('./node_modules/' + matchResult[2])) {
-            path = './node_modules/' + matchResult[1];
+        var matchResult = path.match(/^\.[-\w\/\\]+node_modules[\/\\](([-\w]+)[\/\\](?:[-\w\/\\\.]+))$/);
+        if (fs.existsSync(nodeModulesPath + matchResult[2])) {
+            path = nodeModulesPath + matchResult[1];
         }
         if (fs.existsSync(path) && fs.lstatSync(path).isFile()) {
             var modType = '[mod]';
