@@ -1,6 +1,8 @@
 //vi mz/index.js
 var fis = require('fis3');
 var lolcat = require('fis-lolcat');
+var path = require('path');
+var closest = require('closest-package');
 
 var cloneObjectOrdered = function (obj) {
   if (obj === null || typeof obj !== 'object') {
@@ -362,8 +364,8 @@ fis.match('tracker.js', { packOrder: 100 });
     })
     .match('*.png', {
       useHash: true,
-      optimizer: fis.plugin('png-compressor', {
-        type: 'pngquant'
+      optimizer: fis.plugin('png-compress', {
+        type: 'pngquant',
       })
     })
     .match('*.hd.png', {
@@ -487,6 +489,23 @@ fis.mount = function (config) {
         })
         .match('*.html', {
           relative: false
+        })
+    });
+  }
+
+  //如果指定目标编译目录，重置图片压缩策略
+  if (config.distPath) {
+    var rootProjectPath = closest.sync(fis.project.getProjectPath());
+    var distPath = path.join(path.dirname(rootProjectPath), config.distPath);
+
+    ['prod', 'sqa'].forEach(function (_mediaName_) {
+      fis.media(_mediaName_)
+        .match('*.png', {
+          useHash: true,
+          optimizer: fis.plugin('png-compress', {
+            type: 'pngquant',
+            distPath: distPath
+          })
         })
     });
   }
